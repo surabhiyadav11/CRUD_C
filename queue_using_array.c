@@ -2,11 +2,6 @@
 
 #define SIZE 5
 
-// for underst.
-// front = first element (-1 = no element)
-// rear = last element (-1 = nothing)
-
-
 int queue[SIZE];
 int front = -1;
 int rear = -1;
@@ -16,17 +11,17 @@ int isFull() {
 }
 
 int isEmpty() {
-    return front == -1 || front > rear;  // for eg 3 > 2 queue empty
+    return front == -1 || front > rear;  
 }
 
-//========================
+//======================== 
 void enqueue(int value) {
     if (isFull()) {
         printf("Queue is FULL! Cannot insert %d\n", value);
     }
     else {
-        if (front == -1)     // if queue is empty
-            front = 0;       // as first element will always store at 0
+        if (front == -1)    
+            front = 0;      
 
         
         if (value >30 && value < 40)
@@ -52,14 +47,10 @@ void dequeue() {
     {
         printf("%d  removed from the queue\n", queue[front]);
         front++;
-        // printf("%d  removed from the queue\n", queue[front]);
-        // front++;
     }
 }
 
-// // for dequeue
-// queue [front]
-// queue[0] = 10
+
 
 void display() {
     if (isEmpty()) {
@@ -119,12 +110,6 @@ int main() {
                         printf("Invalid input! Please enter a number.\n");
                         attempts++;
                         while (getchar() != '\n');
-                        continue;
-                    }
-
-                    if (value > 30 && value < 40) {
-                        printf("INVALID\n");
-                        attempts++;
                         continue;
                     }
 

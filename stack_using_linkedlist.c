@@ -1,18 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+struct Node 
+{
     int data;
     struct Node *next;
 };
 
 struct Node *top = NULL;
 
-int isEmpty() {
+int isEmpty() 
+{
     return top == NULL;
 }
 
-void push(int value) {
+void push(int value) 
+{
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
 
     newNode->data = value;
@@ -22,34 +25,36 @@ void push(int value) {
     printf("%d pushed into the stack\n", value);
 }
 
-void pop() {
-    if (isEmpty()) {
+void pop()
+{
+    if (isEmpty())
+    {
         printf("Stack is EMPTY!\n");
-    } else {
+    } 
+    else 
+    {
         struct Node *temp = top;
-
         printf("%d popped from the stack\n", top->data);
-
         top = top->next;
-
         free(temp);
     }
 }
 
-void display() {
-    if (isEmpty()) {
+void display() 
+{
+    if (isEmpty()) 
+    {
         printf("Stack is EMPTY!\n");
-    } else {
+    } 
+    else
+    {
         struct Node *temp = top;
-
         printf("Stack elements are: ");
-
         while (temp != NULL) {
             printf("%d ", temp->data);
             temp = temp->next;
         }
-
-        printf("\n");
+         printf("\n");
     }
 }
 
@@ -65,35 +70,28 @@ int main() {
         printf("4. Exit\n");
         printf("Enter your choice: ");
 
-        // ============================
-        // VALIDATION 1
-        // Check input is digits only
-
-        if (scanf("%d%c", &choice, &extra) != 2 || extra != '\n') {
+        if (scanf("%d%c", &choice, &extra) != 2 || extra != '\n') 
+        {
             printf("Invalid input! Please enter digits only.\n");
             while (getchar() != '\n');
             continue;
         }
 
-        // ============================
-        // VALIDATION 2
-        // Check choice is between 1-4
 
-        if (choice < 1 || choice > 4) {
+        if (choice < 1 || choice > 4) 
+        {
             printf("Invalid choice! Please enter 1 to 4.\n");
             continue;
         }
 
-        switch (choice) {
+        switch (choice) 
+        {
 
             case 1:
                 printf("Enter value to insert: ");
 
-                // ============================
-                // VALIDATION
-                // Check value is a number
-
-                if (scanf("%d%c", &value, &extra) != 2 || extra != '\n') {
+                if (scanf("%d%c", &value, &extra) != 2 || extra != '\n') 
+                {
                     printf("Invalid input! Please enter a number.\n");
                     while (getchar() != '\n');
                     continue;
