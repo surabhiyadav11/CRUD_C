@@ -9,7 +9,6 @@ struct Node {
 struct Node *front = NULL;
 struct Node *rear = NULL;
 
-
 // =================================================
 int isEmpty() {
     return front == NULL;
@@ -61,10 +60,7 @@ void dequeue() {
         free(ptr);
     }
 }
-
-
 // =================================================
-// display queue
 
 void display() {
 
@@ -85,10 +81,7 @@ void display() {
         printf("\n");
     }
 }
-
-
 // =================================================
-
 int main() {
 
     int choice, value;

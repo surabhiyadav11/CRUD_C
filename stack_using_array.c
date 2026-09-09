@@ -5,12 +5,12 @@
 int stack[SIZE];
 int top = -1;
 
-int isFull()
+int Full()
 {
     return top == SIZE - 1;
 }
 
-int isEmpty()
+int Empty()
 {
     return top == -1;
 }
@@ -18,16 +18,16 @@ int isEmpty()
 //===========================================================
 void push(int value) 
 {
-    if (isFull()) 
+    if (Full()) 
     {
         printf("stack is FULL! Cannot insert %d\n", value);
     }
-    if (value > 30 && value < 40)
+  
+  if (value > 30 && value < 40)
     {
         printf("INVALID");
     }
     else 
-
     {
         top++;
         stack[top] = value; 
@@ -39,7 +39,7 @@ void push(int value)
 // =================================================================
 void pop()
 {
-    if (isEmpty()) 
+    if (Empty()) 
     {
         printf("stack is EMPTY!\n");
     }
@@ -52,7 +52,7 @@ void pop()
 
 void display() 
 {
-    if (isEmpty()) 
+    if (Empty()) 
     {
         printf("stack is EMPTY!\n");
     }

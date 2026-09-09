@@ -30,14 +30,11 @@ void enqueue(int value) {
              }
         else {
         rear++;
-            queue[rear] = value; // inserts the new value
-
+            queue[rear] = value; 
             printf("%d inserted in the queue\n", value);
         }
         } 
     }
-
-
 // =================================================
 void dequeue() {
     if (isEmpty()) {
@@ -49,9 +46,7 @@ void dequeue() {
         front++;
     }
 }
-
-
-
+// ==========================================================
 void display() {
     if (isEmpty()) {
         printf("Queue is EMPTY!\n");
@@ -86,7 +81,7 @@ int main() {
         
         if (scanf("%d%c", &choice, &extra) != 2 || extra != '\n') {
             printf("Invalid input! Please enter digits only.\n");
-            while (getchar() != '\n');
+            // while (getchar() != '\n');
             continue;
         }
 
@@ -101,11 +96,9 @@ int main() {
 
             case 1: {
                 int attempts = 0;
-
-                do {
+                do 
+                {
                     printf("Enter value to insert: ");
-
-                    // easy input validation
                     if (scanf("%d%c", &value, &extra) != 2 || extra != '\n') {
                         printf("Invalid input! Please enter a number.\n");
                         attempts++;
@@ -121,10 +114,8 @@ int main() {
                 if (attempts == 3) {
                     printf("Three attempts finished. Returning to main menu.\n");
                 }
-
                 break;
             }
-
             case 2:
                 dequeue();
                 break;

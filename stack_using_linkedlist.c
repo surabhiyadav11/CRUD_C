@@ -24,7 +24,7 @@ void push(int value)
 
     printf("%d pushed into the stack\n", value);
 }
-
+ 
 void pop()
 {
     if (isEmpty())
@@ -76,38 +76,30 @@ int main() {
             while (getchar() != '\n');
             continue;
         }
-
-
         if (choice < 1 || choice > 4) 
         {
             printf("Invalid choice! Please enter 1 to 4.\n");
             continue;
         }
-
+        
         switch (choice) 
         {
-
             case 1:
                 printf("Enter value to insert: ");
-
                 if (scanf("%d%c", &value, &extra) != 2 || extra != '\n') 
                 {
                     printf("Invalid input! Please enter a number.\n");
                     while (getchar() != '\n');
                     continue;
                 }
-
                 push(value);
                 break;
-
             case 2:
                 pop();
                 break;
-
             case 3:
                 display();
                 break;
-
             case 4:
                 printf("Exiting program.\n");
                 return 0;
