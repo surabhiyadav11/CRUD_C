@@ -29,17 +29,15 @@ This repository contains C programs that demonstrate **CRUD operations** (Create
 
 ---
 
-## 🚀 How to Compile and Run
+## How to Compile and Run
 
 ### Compile
 Use GCC to compile any file:
 ```bash
 gcc filename.c -o output.exe
-
 ```
 ###Run 
 ```
 .\output.exe
 ```
-
 ###
