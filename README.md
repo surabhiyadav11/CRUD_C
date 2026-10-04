@@ -1,4 +1,4 @@
-# CRUD Operations in C (Data Structures + File Handling)
+# CRUD Operations in C (Data Structures+File Handling)
 
 This repository contains C programs that demonstrate **CRUD operations** (Create, Read, Update, Delete) in two contexts:
 
