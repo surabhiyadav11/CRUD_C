@@ -7,36 +7,37 @@ struct Node
     struct Node *left;
     struct Node *right;
 };
+struct Node *root = NULL;
+// =======================================================================================================
+// CREATE NODE
 struct Node* createNode(int value)
 {
     struct Node *newNode;
-
     newNode = (struct Node*)malloc(sizeof(struct Node));
-
     newNode->data = value;
     newNode->left = NULL;
     newNode->right = NULL;
 
     return newNode;
 }
-struct Node* insertNode(struct Node *root, int value)
+// ==========================================================================================================
+// INSERT USING BST RULE
+void insertNode(int value)
 {
-    struct Node *newNode;
+    struct Node *newNode = createNode(value);
     struct Node *current;
-    struct Node *parent;
-
-    newNode = createNode(value);
-
+    struct Node *parent = NULL;
     if (root == NULL)
     {
-        return newNode;
+        root = newNode;
+        printf("Node inserted successfully.\n");
+        return;
     }
+    
     current = root;
-    parent = NULL;
     while (current != NULL)
     {
         parent = current;
-
         if (value < current->data)
         {
             current = current->left;
@@ -49,7 +50,7 @@ struct Node* insertNode(struct Node *root, int value)
         {
             printf("Value already exists!\n");
             free(newNode);
-            return root;
+            return;
         }
     }
     if (value < parent->data)
@@ -61,11 +62,11 @@ struct Node* insertNode(struct Node *root, int value)
         parent->right = newNode;
     }
 
-    printf("Node inserted!\n");
-
-    return root;
+    printf("Node inserted successfully.\n");
 }
-void displayTree(struct Node *root)
+// ====================================================
+// DISPLAY TREE STRUCTURE
+void displayTree()
 {
     struct Node *queue[MAX];
     int front = 0;
@@ -73,28 +74,27 @@ void displayTree(struct Node *root)
     struct Node *current;
     if (root == NULL)
     {
-        printf("Tree is empty!\n");
+        printf("Binary search tree is empty.\n");
         return;
     }
 
-    printf("\n===== TREE STRUCTURE =====\n");
+    printf("\n========== TREE STRUCTURE ==========\n");
     printf("Root: %d\n", root->data);
     queue[rear++] = root;
     while (front < rear)
     {
         current = queue[front++];
-
         if (current->left != NULL)
         {
-            printf("  Left of %d: %d\n",
+            printf("Left of %d: %d\n",
                    current->data,
                    current->left->data);
-
             queue[rear++] = current->left;
         }
+
         if (current->right != NULL)
         {
-            printf("  Right of %d: %d\n",
+            printf("Right of %d: %d\n",
                    current->data,
                    current->right->data);
 
@@ -102,9 +102,16 @@ void displayTree(struct Node *root)
         }
     }
 }
-void searchNode(struct Node *root, int value)
+// ====================================================
+// SEARCH USING BST
+void searchNode(int value)
 {
     struct Node *current = root;
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
     while (current != NULL)
     {
         if (current->data == value)
@@ -123,7 +130,9 @@ void searchNode(struct Node *root, int value)
     }
     printf("Value not found!\n");
 }
-void inorder(struct Node *root)
+// ====================================================
+// INORDER USING STACK
+void inorder()
 {
     struct Node *stack[MAX];
     int top = -1;
@@ -133,6 +142,7 @@ void inorder(struct Node *root)
         while (current != NULL)
         {
             stack[++top] = current;
+
             current = current->left;
         }
 
@@ -141,13 +151,16 @@ void inorder(struct Node *root)
         current = current->right;
     }
 }
-void preorder(struct Node *root)
+// ====================================================
+// PREORDER USING STACK
+void preorder()
 {
     struct Node *stack[MAX];
     int top = -1;
     struct Node *current;
     if (root == NULL)
         return;
+
     stack[++top] = root;
     while (top != -1)
     {
@@ -163,7 +176,9 @@ void preorder(struct Node *root)
         }
     }
 }
-void postorder(struct Node *root)
+// ====================================================
+// POSTORDER USING 2 STACKS
+void postorder()
 {
     struct Node *stack1[MAX];
     struct Node *stack2[MAX];
@@ -173,11 +188,13 @@ void postorder(struct Node *root)
 
     if (root == NULL)
         return;
+
     stack1[++top1] = root;
     while (top1 != -1)
     {
         current = stack1[top1--];
         stack2[++top2] = current;
+
         if (current->left != NULL)
         {
             stack1[++top1] = current->left;
@@ -190,29 +207,81 @@ void postorder(struct Node *root)
     while (top2 != -1)
     {
         current = stack2[top2--];
+
         printf("%d ", current->data);
     }
 }
-struct Node* updateNode(struct Node *root)
+// ====================================================
+// BREADTH TRAVERSAL USING QUEUE
+void breadthTraversal()
 {
-    int oldValue;
-    int newValue;
+    struct Node *queue[MAX];
+    int front = 0;
+    int rear = 0;
+    struct Node *current;
+    if (root == NULL)
+        return;
 
-    printf("Enter old value: ");
-    scanf("%d", &oldValue);
+    queue[rear++] = root;
+    while (front < rear)
+    {
+        current = queue[front++];
+        printf("%d ", current->data);
+        if (current->left != NULL)
+        {
+            queue[rear++] = current->left;
+        }
+        if (current->right != NULL)
+        {
+            queue[rear++] = current->right;
+        }
+    }
+}
+// ====================================================
+// DEPTH TRAVERSAL USING ssTACK
+void depthTraversal()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+    if (root == NULL)
+        return;
 
-    printf("Enter new value: ");
-    scanf("%d", &newValue);
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+        printf("%d ", current->data);
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
+        }
+    }
+}
+// ====================================================
+// UPDATE USING BST
+void updateNode(int oldValue, int newValue)
+{
     struct Node *current = root;
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
     while (current != NULL)
     {
         if (current->data == oldValue)
         {
-            root = deleteNode(root, oldValue);
-            root = insertNode(root, newValue);
-            printf("Value updated!\n");
-            return root;
+            current->data = newValue;
+            printf("Value updated successfully.\n");
+            return;
         }
+
         if (oldValue < current->data)
         {
             current = current->left;
@@ -223,16 +292,21 @@ struct Node* updateNode(struct Node *root)
         }
     }
     printf("Value not found!\n");
-    return root;
 }
-
-struct Node* deleteNode(struct Node *root, int value)
+// ====================================================
+// DELETE USING BST
+void deleteNode(int value)
 {
     struct Node *current = root;
     struct Node *parent = NULL;
     struct Node *successor;
     struct Node *successorParent;
     struct Node *child;
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
     while (current != NULL && current->data != value)
     {
         parent = current;
@@ -248,8 +322,9 @@ struct Node* deleteNode(struct Node *root, int value)
     if (current == NULL)
     {
         printf("Value not found!\n");
-        return root;
+        return;
     }
+    // =======================================
     if (current->left != NULL && current->right != NULL)
     {
         successorParent = current;
@@ -263,6 +338,7 @@ struct Node* deleteNode(struct Node *root, int value)
         current = successor;
         parent = successorParent;
     }
+    // =======
     if (current->left != NULL)
     {
         child = current->left;
@@ -271,7 +347,7 @@ struct Node* deleteNode(struct Node *root, int value)
     {
         child = current->right;
     }
-
+    // =======
     if (parent == NULL)
     {
         free(current);
@@ -287,85 +363,84 @@ struct Node* deleteNode(struct Node *root, int value)
         parent->right = child;
         free(current);
     }
-
-    printf("Node deleted!\n");
-
-    return root;
+    printf("Node deleted successfully.\n");
 }
-
-
+// ====================================================
+// MAIN
 int main()
 {
-    struct Node *root = NULL;
-
-    int value;
     int choice;
-    char extra;
-    printf("Enter root value: ");
-    scanf("%d", &value);
-    root = createNode(value);
+    int value;
+    int oldValue;
+    int newValue;
     while (1)
     {
-        printf("\n\n===== BINARY SEARCH TREE CRUD =====\n");
-        printf("1. Insert\n");
-        printf("2. Read\n");
-        printf("3. Search\n");
-        printf("4. Update\n");
-        printf("5. Delete\n");
-        printf("6. Exit\n");
-
-        printf("Enter choice: ");
-        if (scanf("%d%c", &choice, &extra) != 2 ||
-            extra != '\n')
-        {
-            printf("Invalid input! Enter digits only.\n");
-
-            while (getchar() != '\n');
-
-            continue;
-        }
-        if (choice < 1 || choice > 6)
-        {
-            printf("Invalid choice! Enter 1 to 6.\n");
-
-            continue;
-        }
-
-        
+        printf("\n\n========== BINARY SEARCH TREE MENU ==========\n");
+        printf("1. Create / Insert\n");
+        printf("2. Read / Display\n");
+        printf("3. Update\n");
+        printf("4. Delete\n");
+        printf("5. Exit\n");
+        printf("6. Search\n");
+        printf("=============================================\n");
+        printf("Enter your choice (1-6): ");
+        scanf("%d", &choice);
         switch (choice)
         {
             case 1:
-                printf("Enter value: ");
+                printf("Enter value to insert: ");
                 scanf("%d", &value);
-                root = insertNode(root, value);
+                insertNode(value);
                 break;
             case 2:
-                displayTree(root);
-                printf("\nInorder: ");
-                inorder(root);
+                if (root == NULL)
+                {
+                    printf("Binary search tree is empty.\n");
+                }
+                else
+                {
+                    displayTree();
+                    printf("\nInorder: ");
+                    inorder();
 
-                printf("\nPreorder: ");
-                preorder(root);
+                    printf("\nPreorder: ");
+                    preorder();
 
-                printf("\nPostorder: ");
-                postorder(root);
+                    printf("\nPostorder: ");
+                    postorder();
+
+                    printf("\nBreadth Traversal: ");
+                    breadthTraversal();
+
+                    printf("\nDepth Traversal: ");
+                    depthTraversal();
+                    printf("\n");
+                }
                 break;
             case 3:
-                printf("Enter value to search: ");
-                scanf("%d", &value);
-                searchNode(root, value);
+                printf("Enter old value: ");
+                scanf("%d", &oldValue);
+
+                printf("Enter new value: ");
+                scanf("%d", &newValue);
+
+                updateNode(oldValue, newValue);
                 break;
             case 4:
-                root = updateNode(root);
-                break;
-            case 5:
                 printf("Enter value to delete: ");
                 scanf("%d", &value);
-                root = deleteNode(root, value);
+                deleteNode(value);
                 break;
-            case 6:
-                printf("Program ended.\n");
+            case 5:
+                printf("Exiting program...\n");
                 exit(0);
+            case 6:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+                searchNode(value);
+                break;
+            default:
+                printf("Invalid choice!\n");
         }
     }
     return 0;

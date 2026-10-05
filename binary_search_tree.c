@@ -1,225 +1,503 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define MAX 100
+
 struct Node
 {
     int data;
     struct Node *left;
     struct Node *right;
 };
-// =====================================================
+
+struct Node *root = NULL;
+
 struct Node* createNode(int value)
 {
     struct Node *newNode;
+
     newNode = (struct Node*)malloc(sizeof(struct Node));
+
     newNode->data = value;
     newNode->left = NULL;
     newNode->right = NULL;
+
     return newNode;
 }
-// =====================================================
-struct Node* insertNode(struct Node *root, int value)
+
+void insertNode(int value)
 {
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+    struct Node *newNode = createNode(value);
+
     if (root == NULL)
     {
-        return createNode(value);
-    }
-
-    if (value < root->data)
-    {
-        root->left = insertNode(root->left, value);
-    }
-    else if (value > root->data)
-    {
-        root->right = insertNode(root->right, value);
-    }
-    else
-    {
-        printf("Value already exists!\n");
-    }
-
-    return root;
-}
-// =====================================================
-void inorder(struct Node *root)
-{
-    if (root == NULL)
+        root = newNode;
+        printf("Node inserted successfully.\n");
         return;
-    inorder(root->left);
-    printf("%d ", root->data);
-    inorder(root->right);
-}
-void preorder(struct Node *root)
-{
-    if (root == NULL)
-        return;
-    printf("%d ", root->data);
-    preorder(root->left);
-    preorder(root->right);
-}
-void postorder(struct Node *root)
-{
-    if (root == NULL)
-        return;
-    postorder(root->left);
-    postorder(root->right);
-    printf("%d ", root->data);
-}
-// ====================================================================
-struct Node* updateNode(struct Node *root, int oldValue, int newValue)
-{
-    if (root == NULL)
-    {
-        printf("Value not found!\n");
-        return root;
-    }
-    if (oldValue < root->data)
-    {
-        root->left = updateNode(root->left, oldValue, newValue);
-    }
-    else if (oldValue > root->data)
-    {
-        root->right = updateNode(root->right, oldValue, newValue);
-    }
-    else
-    {
-        root->data = newValue;
-        printf("Value updated!\n");
-    }
-    return root;
-}
-// =====================================================
-struct Node* findMin(struct Node *root)
-{
-    while (root->left != NULL)
-    {
-        root = root->left;
-    }
-    return root;
-}
-// =====================================================
-struct Node* deleteNode(struct Node *root, int value)
-{
-    if (root == NULL)
-    {
-        printf("Value not found!\n");
-        return root;
     }
 
-    if (value < root->data)
-    {
-        root->left = deleteNode(root->left, value);
-    }
+    stack[++top] = root;
 
-    else if (value > root->data)
+    while (top != -1)
     {
-        root->right = deleteNode(root->right, value);
-    }
+        current = stack[top--];
 
-    else
-    {
-        // No child
-        if (root->left == NULL && root->right == NULL)
+        if (current->left == NULL)
         {
-            free(root);
-            return NULL;
+            current->left = newNode;
+            printf("Node inserted successfully.\n");
+            return;
         }
-        // Only right child
-        else if (root->left == NULL)
-        {
-            struct Node *temp = root->right;
-            free(root);
-            return temp;
-        }
-        // Only left child
-        else if (root->right == NULL)
-        {
-            struct Node *temp = root->left;
-            free(root);
-            return temp;
-        }
-        // Two children
         else
         {
-            struct Node *temp = findMin(root->right);
-            root->data = temp->data;
-            root->right = deleteNode(root->right, temp->data);
+            stack[++top] = current->left;
+        }
+
+        if (current->right == NULL)
+        {
+            current->right = newNode;
+            printf("Node inserted successfully.\n");
+            return;
+        }
+        else
+        {
+            stack[++top] = current->right;
+        }
+    }
+}
+
+void displayTree()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+    {
+        printf("Binary tree is empty.\n");
+        return;
+    }
+
+    printf("\n========== TREE STRUCTURE ==========\n");
+    printf("Root: %d\n", root->data);
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        if (current->right != NULL)
+        {
+            printf("Right of %d: %d\n",
+                   current->data,
+                   current->right->data);
+
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            printf("Left of %d: %d\n",
+                   current->data,
+                   current->left->data);
+
+            stack[++top] = current->left;
+        }
+    }
+}
+
+void searchNode(int value)
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        if (current->data == value)
+        {
+            printf("Value found!\n");
+            return;
+        }
+
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
         }
     }
 
-    return root;
+    printf("Value not found!\n");
 }
-// =====================================================
+
+void inorder()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current = root;
+
+    while (current != NULL || top != -1)
+    {
+        while (current != NULL)
+        {
+            stack[++top] = current;
+            current = current->left;
+        }
+
+        current = stack[top--];
+
+        printf("%d ", current->data);
+
+        current = current->right;
+    }
+}
+
+void preorder()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+        return;
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        printf("%d ", current->data);
+
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
+        }
+    }
+}
+
+void postorder()
+{
+    struct Node *stack1[MAX];
+    struct Node *stack2[MAX];
+
+    int top1 = -1;
+    int top2 = -1;
+
+    struct Node *current;
+
+    if (root == NULL)
+        return;
+
+    stack1[++top1] = root;
+
+    while (top1 != -1)
+    {
+        current = stack1[top1--];
+
+        stack2[++top2] = current;
+
+        if (current->left != NULL)
+        {
+            stack1[++top1] = current->left;
+        }
+
+        if (current->right != NULL)
+        {
+            stack1[++top1] = current->right;
+        }
+    }
+
+    while (top2 != -1)
+    {
+        current = stack2[top2--];
+
+        printf("%d ", current->data);
+    }
+}
+
+void breadthTraversal()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+        return;
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        printf("%d ", current->data);
+
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
+        }
+    }
+}
+
+void depthTraversal()
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+        return;
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        printf("%d ", current->data);
+
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
+        }
+    }
+}
+
+void updateNode(int oldValue, int newValue)
+{
+    struct Node *stack[MAX];
+    int top = -1;
+    struct Node *current;
+
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        if (current->data == oldValue)
+        {
+            current->data = newValue;
+            printf("Value updated successfully.\n");
+            return;
+        }
+
+        if (current->right != NULL)
+        {
+            stack[++top] = current->right;
+        }
+
+        if (current->left != NULL)
+        {
+            stack[++top] = current->left;
+        }
+    }
+
+    printf("Value not found!\n");
+}
+
+void deleteNode(int value)
+{
+    struct Node *stack[MAX];
+    int top = -1;
+
+    struct Node *current;
+    struct Node *target = NULL;
+    struct Node *deepest = NULL;
+    struct Node *parent = NULL;
+
+    if (root == NULL)
+    {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    stack[++top] = root;
+
+    while (top != -1)
+    {
+        current = stack[top--];
+
+        if (current->data == value)
+        {
+            target = current;
+        }
+
+        if (current->left != NULL)
+        {
+            parent = current;
+            deepest = current->left;
+            stack[++top] = current->left;
+        }
+
+        if (current->right != NULL)
+        {
+            parent = current;
+            deepest = current->right;
+            stack[++top] = current->right;
+        }
+    }
+
+    if (target == NULL)
+    {
+        printf("Value not found!\n");
+        return;
+    }
+
+    if (deepest == NULL)
+    {
+        free(root);
+        root = NULL;
+
+        printf("Node deleted successfully.\n");
+        return;
+    }
+
+    target->data = deepest->data;
+
+    if (parent->right == deepest)
+    {
+        parent->right = NULL;
+    }
+    else
+    {
+        parent->left = NULL;
+    }
+
+    free(deepest);
+
+    printf("Node deleted successfully.\n");
+}
+
 int main()
 {
-    struct Node *root = NULL;
     int choice;
     int value;
     int oldValue;
     int newValue;
-    char extra;
+
     while (1)
     {
-        printf("\n\n===== BINARY SEARCH TREE CRUD =====\n");
-        printf("1. Create\n");
-        printf("2. Read\n");
+        printf("\n\n========== BINARY TREE MENU ==========\n");
+        printf("1. Create / Insert\n");
+        printf("2. Read / Display\n");
         printf("3. Update\n");
         printf("4. Delete\n");
         printf("5. Exit\n");
+        printf("6. Search\n");
+        printf("======================================\n");
 
-        printf("Enter your choice: ");
-        // =================================================
-        if (scanf("%d%c", &choice, &extra) != 2 || extra != '\n')
-        {
-            printf("Invalid input! Please enter digits only.\n");
-            while (getchar() != '\n');
-            continue;
-        }
-        if (choice < 1 || choice > 5)
-        {
-            printf("Invalid choice! Please enter 1 to 5.\n");
-            continue;
-        }
-        // =================================================
+        printf("Enter your choice (1-6): ");
+        scanf("%d", &choice);
+
         switch (choice)
         {
             case 1:
                 printf("Enter value to insert: ");
                 scanf("%d", &value);
-                root = insertNode(root, value);
-                printf("Node created successfully!\n");
-                break;            
+
+                insertNode(value);
+                break;
+
             case 2:
                 if (root == NULL)
                 {
-                    printf("Tree is empty!\n");
-                    break;
+                    printf("Binary tree is empty.\n");
                 }
-                printf("\nInorder: ");
-                inorder(root);
+                else
+                {
+                    displayTree();
 
-                printf("\nPreorder: ");
-                preorder(root);
+                    printf("\nInorder: ");
+                    inorder();
 
-                printf("\nPostorder: ");
-                postorder(root);
+                    printf("\nPreorder: ");
+                    preorder();
+
+                    printf("\nPostorder: ");
+                    postorder();
+
+                    printf("\nBreadth Traversal: ");
+                    breadthTraversal();
+
+                    printf("\nDepth Traversal: ");
+                    depthTraversal();
+
+                    printf("\n");
+                }
                 break;
+
             case 3:
                 printf("Enter old value: ");
                 scanf("%d", &oldValue);
 
                 printf("Enter new value: ");
                 scanf("%d", &newValue);
-                root = updateNode(root, oldValue, newValue);
+
+                updateNode(oldValue, newValue);
                 break;
+
             case 4:
                 printf("Enter value to delete: ");
                 scanf("%d", &value);
-                root = deleteNode(root, value);
+
+                deleteNode(value);
                 break;
+
             case 5:
-                printf("Program ended.\n");
+                printf("Exiting program...\n");
                 exit(0);
+
+            case 6:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+
+                searchNode(value);
+                break;
+
+            default:
+                printf("Invalid choice!\n");
         }
     }
+
     return 0;
 }

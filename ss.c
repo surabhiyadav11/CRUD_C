@@ -39,25 +39,32 @@ void insertNode(int value)
         return;
     }
     queue[rear++] = root;
-    // printf("%d",queue[0]->data);
+    print("%d",queue[0]->data);
     
     while (front < rear)
     {
         current = queue[front++];
 
         if (current->left == NULL)
-        {   current->left = newNode;
+        {
+            current->left = newNode;
             printf("Node inserted successfully.\n");
-            return;}
+            return;
+        }
         else
-        {  queue[rear++] = current->left; }
-
+        {
+            queue[rear++] = current->left;
+        }
         if (current->right == NULL)
-        {   current->right = newNode;
+        {
+            current->right = newNode;
             printf("Node inserted successfully.\n");
-            return;}
+            return;
+        }
         else
-        {   queue[rear++] = current->right;  }
+        {
+            queue[rear++] = current->right;
+        }
     }
 }
 // ====================================================
@@ -107,7 +114,6 @@ void searchNode(int value)
         printf("Tree is empty.\n");
         return;
     }
-
     queue[rear++] = root;
     while (front < rear)
     {

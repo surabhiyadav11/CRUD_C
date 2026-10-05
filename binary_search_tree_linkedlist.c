@@ -1,6 +1,7 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #define MAX 100
+//  BINARY SEARCH TREE 
 struct Node
 {
     int data;
@@ -8,128 +9,168 @@ struct Node
     struct Node *right;
 };
 struct Node *root = NULL;
-// ====================================================
-// CREATE NODE
+// ============= QUEUE USING LINKED LIST =================
+struct QueueNode
+{
+    struct Node *treeNode;
+    struct QueueNode *next;
+};
+struct QueueNode *front = NULL;
+struct QueueNode *rear = NULL;
+// ================= ENQUEUE =================
+void enqueue(struct Node *node)
+{
+    struct QueueNode *newNode;
+
+    newNode = (struct QueueNode*)malloc(sizeof(struct QueueNode));
+
+    newNode->treeNode = node;
+    newNode->next = NULL;
+
+    if (rear == NULL)
+    {
+        front = rear = newNode;
+    }
+    else
+    {
+        rear->next = newNode;
+        rear = newNode;
+    }
+}
+// ================= DEQUEUE =================
+struct Node* dequeue()
+{
+    struct QueueNode *temp;
+    struct Node *node;
+
+    if (front == NULL)
+        return NULL;
+    temp = front;
+    node = temp->treeNode;
+    front = front->next;
+    if (front == NULL)
+     rear = NULL;
+    free(temp);
+    return node;
+}
+//  CHECK QUEUE EMPTY 
+int isEmpty()
+{
+    if (front == NULL)
+        return 1;
+    return 0;
+}
+//  CREATE NODE 
 struct Node* createNode(int value)
 {
     struct Node *newNode;
-
     newNode = (struct Node*)malloc(sizeof(struct Node));
-
     newNode->data = value;
     newNode->left = NULL;
     newNode->right = NULL;
-
     return newNode;
 }
-// ====================================================
-// INSERT USING QUEUE
+//  INSERT USING 
+
 void insertNode(int value)
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
-    struct Node *current;
     struct Node *newNode = createNode(value);
-
+    struct Node *current;
+    struct Node *parent = NULL;
     if (root == NULL)
     {
         root = newNode;
         printf("Node inserted successfully.\n");
         return;
     }
-    queue[rear++] = root;
-    // printf("%d",queue[0]->data);
-    
-    while (front < rear)
+    current = root;
+    while (current != NULL)
     {
-        current = queue[front++];
-
-        if (current->left == NULL)
-        {   current->left = newNode;
-            printf("Node inserted successfully.\n");
-            return;}
+        parent = current;
+        if (value < current->data)
+        {
+            current = current->left;
+        }
+        else if (value > current->data)
+        {
+            current = current->right;
+        }
         else
-        {  queue[rear++] = current->left; }
-
-        if (current->right == NULL)
-        {   current->right = newNode;
-            printf("Node inserted successfully.\n");
-            return;}
-        else
-        {   queue[rear++] = current->right;  }
+        {
+            printf("Value already exists!\n");
+            free(newNode);
+            return;
+        }
     }
+    if (value < parent->data)
+    {
+        parent->left = newNode;
+    }
+    else
+    {
+        parent->right = newNode;
+    }
+    printf("Node inserted successfully.\n");
 }
-// ====================================================
-// DISPLAY TREE STRUCTURE
+//  DISPLAY TREE 
 void displayTree()
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
     struct Node *current;
-
     if (root == NULL)
     {
-        printf("Binary tree is empty.\n");
+        printf("Binary search tree is empty.\n");
         return;
     }
     printf("\n========== TREE STRUCTURE ==========\n");
     printf("Root: %d\n", root->data);
-    queue[rear++] = root;
-    while (front < rear)
+    enqueue(root);
+    while (!isEmpty())
     {
-        current = queue[front++];
+        current = dequeue();
         if (current->left != NULL)
         {
-            printf("Left of %d: %d\n",current->data,current->left->data);
-            queue[rear++] = current->left;
+            printf("Left of %d: %d\n",
+                   current->data,
+                   current->left->data);
+            enqueue(current->left);
         }
         if (current->right != NULL)
         {
-            printf("Right of %d: %d\n",current->data, current->right->data);
-            queue[rear++] = current->right;
+            printf("Right of %d: %d\n",
+                   current->data,
+                   current->right->data);
+            enqueue(current->right);
         }
     }
 }
-// ====================================================
-// SEARCH USING QUEUE
+//  SEARCH USING BST 
 void searchNode(int value)
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
-
-    struct Node *current;
-
+    struct Node *current = root;
     if (root == NULL)
     {
         printf("Tree is empty.\n");
         return;
     }
-
-    queue[rear++] = root;
-    while (front < rear)
+    while (current != NULL)
     {
-        current = queue[front++];
         if (current->data == value)
         {
             printf("Value found!\n");
             return;
         }
-        if (current->left != NULL)
+        if (value < current->data)
         {
-            queue[rear++] = current->left;
+            current = current->left;
         }
-        if (current->right != NULL)
+        else
         {
-            queue[rear++] = current->right;
+            current = current->right;
         }
     }
     printf("Value not found!\n");
 }
-// ====================================================
-// INORDER USING STACK
+// ================= INORDER USING STACK =================
 void inorder()
 {
     struct Node *stack[MAX];
@@ -147,16 +188,13 @@ void inorder()
         current = current->right;
     }
 }
-// ====================================================
-// PREORDER USING STACK
+//  PREORDER
 void preorder()
-{
-    struct Node *stack[MAX];
+{struct Node *stack[MAX];
     int top = -1;
     struct Node *current;
     if (root == NULL)
         return;
-
     stack[++top] = root;
     while (top != -1)
     {
@@ -172,8 +210,7 @@ void preorder()
         }
     }
 }
-// ====================================================
-// POSTORDER USING 2 STACKS
+//  POSTORDE
 void postorder()
 {
     struct Node *stack1[MAX];
@@ -181,12 +218,9 @@ void postorder()
     int top1 = -1;
     int top2 = -1;
     struct Node *current;
-
     if (root == NULL)
         return;
-
     stack1[++top1] = root;
-
     while (top1 != -1)
     {
         current = stack1[top1--];
@@ -206,33 +240,28 @@ void postorder()
         printf("%d ", current->data);
     }
 }
-// ====================================================
-// BREADTH TRAVERSAL USING QUEUE
+//  BREADTH TRAVERSAL USING LINKED LIST QUEUE
 void breadthTraversal()
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
     struct Node *current;
     if (root == NULL)
         return;
-    queue[rear++] = root;
-    while (front < rear)
+    enqueue(root);
+    while (!isEmpty())
     {
-        current = queue[front++];
+        current = dequeue();
         printf("%d ", current->data);
         if (current->left != NULL)
         {
-            queue[rear++] = current->left;
+            enqueue(current->left);
         }
         if (current->right != NULL)
         {
-            queue[rear++] = current->right;
+            enqueue(current->right);
         }
     }
 }
-// ====================================================
-// DEPTH TRAVERSAL USING STACKkkk
+//  DEPTH TRAVERSAL USING STACK
 void depthTraversal()
 {
     struct Node *stack[MAX];
@@ -240,7 +269,6 @@ void depthTraversal()
     struct Node *current;
     if (root == NULL)
         return;
-
     stack[++top] = root;
     while (top != -1)
     {
@@ -256,108 +284,106 @@ void depthTraversal()
         }
     }
 }
-// ====================================================
-// UPDATE USING QUEUE
+//  UPDATE USING BST 
 void updateNode(int oldValue, int newValue)
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
-    struct Node *current;
+    struct Node *current = root;
     if (root == NULL)
     {
         printf("Tree is empty.\n");
         return;
     }
-    queue[rear++] = root;
-
-    while (front < rear)
+    while (current != NULL)
     {
-        current = queue[front++];
         if (current->data == oldValue)
         {
             current->data = newValue;
             printf("Value updated successfully.\n");
             return;
         }
-        if (current->left != NULL)
+        if (oldValue < current->data)
         {
-            queue[rear++] = current->left;
+            current = current->left;
         }
-        if (current->right != NULL)
+        else
         {
-            queue[rear++] = current->right;
+            current = current->right;
         }
     }
     printf("Value not found!\n");
 }
-// ====================================================
-// DELETE USING QUEUE
+//  DELETE USING BST 
 void deleteNode(int value)
 {
-    struct Node *queue[MAX];
-    int front = 0;
-    int rear = 0;
-    struct Node *current;
-    struct Node *target = NULL;
-    struct Node *deepest = NULL;
+    struct Node *current = root;
     struct Node *parent = NULL;
+    struct Node *successor;
+    struct Node *successorParent;
+    struct Node *child;
     if (root == NULL)
     {
         printf("Tree is empty.\n");
         return;
     }
-    queue[rear++] = root;
-    while (front < rear)
+    while (current != NULL && current->data != value)
     {
-        current = queue[front++];
-
-        if (current->data == value)
+        parent = current;
+        if (value < current->data)
         {
-            target = current;
+            current = current->left;
         }
-
-        if (current->left != NULL)
+        else
         {
-            parent = current;
-            deepest = current->left;
-            queue[rear++] = current->left;
-        }
-
-        if (current->right != NULL)
-        {
-            parent = current;
-            deepest = current->right;
-            queue[rear++] = current->right;
+            current = current->right;
         }
     }
-
-    if (target == NULL)
+    if (current == NULL)
     {
         printf("Value not found!\n");
         return;
     }
-    if (deepest == NULL)
+    // NODE HAS TWO CHILDREN
+    if (current->left != NULL && current->right != NULL)
     {
-        free(root);
-        root = NULL;
-        printf("Node deleted successfully.\n");
-        return;
+        successorParent = current;
+        successor = current->right;
+        while (successor->left != NULL)
+        {
+            successorParent = successor;
+            successor = successor->left;
+        }
+        current->data = successor->data;
+        current = successor;
+        parent = successorParent;
     }
-    target->data = deepest->data;
-    if (parent->right == deepest)
+    // FIND CHILD
+    if (current->left != NULL)
     {
-        parent->right = NULL;
+        child = current->left;
     }
     else
     {
-        parent->left = NULL;
+        child = current->right;
     }
-    free(deepest);
+    // DELETE NODE
+    if (parent == NULL)
+    {
+        free(current);
+        root = child;
+    }
+    else if (parent->left == current)
+    {
+        parent->left = child;
+        free(current);
+    }
+    else
+    {
+        parent->right = child;
+        free(current);
+    }
     printf("Node deleted successfully.\n");
 }
-// ====================================================
-// MAIN
+//  MAIN 
 int main()
 {
     int choice;
@@ -366,14 +392,14 @@ int main()
     int newValue;
     while (1)
     {
-        printf("\n\n========== BINARY TREE MENU ==========\n");
+        printf("\n\n========== BINARY SEARCH TREE MENU ==========\n");
         printf("1. Create / Insert\n");
         printf("2. Read / Display\n");
         printf("3. Update\n");
         printf("4. Delete\n");
         printf("5. Exit\n");
-        printf("6. Search Using Stack\n");
-        printf("======================================\n");
+        printf("6. Search\n");
+        printf("=============================================\n");
         printf("Enter your choice (1-6): ");
         scanf("%d", &choice);
         switch (choice)
@@ -386,23 +412,19 @@ int main()
             case 2:
                 if (root == NULL)
                 {
-                    printf("Binary tree is empty.\n");
+                    printf("Binary search tree is empty.\n");
                 }
                 else
                 {
                     displayTree();
                     printf("\nInorder: ");
                     inorder();
-
                     printf("\nPreorder: ");
                     preorder();
-
                     printf("\nPostorder: ");
                     postorder();
-
                     printf("\nBreadth Traversal: ");
                     breadthTraversal();
-
                     printf("\nDepth Traversal: ");
                     depthTraversal();
                     printf("\n");
@@ -411,7 +433,6 @@ int main()
             case 3:
                 printf("Enter old value: ");
                 scanf("%d", &oldValue);
-
                 printf("Enter new value: ");
                 scanf("%d", &newValue);
                 updateNode(oldValue, newValue);
