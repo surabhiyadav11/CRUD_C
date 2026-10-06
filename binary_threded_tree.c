@@ -10,6 +10,8 @@ struct Node
 };
 struct Node* createNode(int value)
 {
+    //initially new value=data then left&right pointers are null also 
+    //also the thread left and right are null 
     struct Node *newNode;
     newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = value;
@@ -17,7 +19,6 @@ struct Node* createNode(int value)
     newNode->right = NULL;
     newNode->lthread = 0;
     newNode->rthread = 0;
-
     return newNode;
 }
 struct Node* insertNode(struct Node *root, int value)
@@ -43,6 +44,7 @@ struct Node* insertNode(struct Node *root, int value)
     }
     return root;
 }
+//coverts unused null pointers to threadsss
 void createThreads(struct Node *root, struct Node **previous)
 {
     if (root == NULL)
@@ -90,39 +92,34 @@ void inorder(struct Node *root)
         }
     }
 }
-void displayTree(struct Node *root)
-{
-    if (root == NULL)
-    {
-        printf("Tree is empty!\n");
-        return;
-    }
-    printf("\n===== THREADED BINARY TREE =====\n");
-    printf("Inorder: ");
-    inorder(root);
-    printf("\n");
-}
-
+// void displayTree(struct Node *root)
+// {
+//     if (root == NULL)
+//     {
+//         printf("Tree is empty!\n");
+//         return;
+//     }
+//     printf("\n===== THREADED BINARY TREE =====\n");
+//     printf("Inorder: ");
+//     inorder(root);
+//     printf("\n");
+// }
 int main()
 {
     struct Node *root = NULL;
     struct Node *previous = NULL;
-
     int choice;
     int value;
     char extra;
-
     while (1)
     {
         printf("\n\n===== THREADED BINARY TREE =====\n");
-
         printf("1. Insert\n");
         printf("2. Read\n");
         printf("3. Exit\n");
         printf("Enter choice: ");
 
-        if (scanf("%d%c", &choice, &extra) != 2 ||
-            extra != '\n')
+        if (scanf("%d%c", &choice, &extra) != 2 || extra != '\n')
         {
             printf("Invalid input! Enter digits only.\n");
             while (getchar() != '\n');

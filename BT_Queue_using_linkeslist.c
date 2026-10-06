@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX 100
-//  BINARY TREE 
 struct Node
 {
     int data;
@@ -29,8 +28,7 @@ void enqueue(struct Node *node)
         front = rear = newNode;
     }
     else
-    {
-        rear->next = newNode;
+    {        rear->next = newNode;
         rear = newNode;
     }
 }
@@ -139,7 +137,7 @@ void displayTree()
         }
     }
 }
-//  SEARCH USING QUEUE 
+// SEARCH USING QUEUE 
 void searchNode(int value)
 {
     struct Node *current;
@@ -170,14 +168,14 @@ void searchNode(int value)
     printf("Value not found!\n");
 }
 //  INORDER USING STACK 
-void inorder()
+void inorder() 
 {
     struct Node *stack[MAX];
     int top = -1;
     struct Node *current = root;
     while (current != NULL || top != -1)
     {
-        while (current != NULL)
+        while (current != NULL)  
         {
             stack[++top] = current;
             current = current->left;
@@ -227,9 +225,8 @@ void postorder()
     stack1[++top1] = root;
 
     while (top1 != -1)
-    {
-        current = stack1[top1--];
-
+{
+         current = stack1[top1--];
         stack2[++top2] = current;
 
         if (current->left != NULL)
@@ -249,7 +246,7 @@ void postorder()
         printf("%d ", current->data);
     }
 }
-// ================= BREADTH TRAVERSAL 
+//  BREADTH TRAVERSAL 
 void breadthTraversal()
 {
     struct Node *current;
@@ -271,7 +268,7 @@ void breadthTraversal()
         }
     }
 }
-// ================= DEPTH TRAVER
+//depth traver
 void depthTraversal()
 {
     struct Node *stack[MAX];
@@ -294,7 +291,7 @@ void depthTraversal()
         }
     }
 }
-// ================= UPDATE USING QUEUE 
+// UPDATE USING QUEUE 
 void updateNode(int oldValue, int newValue)
 {
     struct Node *current;
@@ -324,7 +321,7 @@ void updateNode(int oldValue, int newValue)
     }
     printf("Value not found!\n");
 }
-// ================= DELETE USING QUEUE =================
+//  DELETE USING QUEUE 
 void deleteNode(int value)
 {
     struct Node *current;
@@ -370,7 +367,6 @@ void deleteNode(int value)
         printf("Node deleted successfully.\n");
         return;
     }
-
     target->data = deepest->data;
     if (parent->right == deepest)
     {
