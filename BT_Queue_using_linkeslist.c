@@ -8,7 +8,7 @@ struct Node
     struct Node *right;
 };
 struct Node *root = NULL;
-//  Queue using linkdlistt
+
 struct QueueNode
 {
     struct Node *treeNode;
