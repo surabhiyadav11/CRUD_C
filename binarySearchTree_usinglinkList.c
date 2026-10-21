@@ -31,22 +31,24 @@ void insertNode(int value)
         return;                     
     }
     current = root;                   // starts checking from root
-    while (current != NULL)           // continues until empty position is found
+    while (current != NULL)           // continues until empty position is founddd
     {
-        parent = current;             // stores current node as paren
-        if (value < current->data)    // checks if value is smaller
+        parent = current;             // stores current node as parent
+        if (value < current->data)    //check value lahan ahe tr left la
         {
-            current = current->left;  // moves to left child
+            current = current->left;  // current ata left la move honar
         }
-        else if (value > current->data) // checks if value is greater
+        else if (value > current->data) // check value mothi ahe tr right la 
         {
-            current = current->right; // moves to right child
+            current = current->right; // current right la move hoanr ATA 
         }
-        else                           // value is equal
+        else                           
         {
-            printf("Value already exists!\n");
-            free(newNode);             // deletes unused new node from memory
-            return;                    // stops function
+            printf("Value already exists!\n"); // mailny ethe value=root or value which inserting is equal to curent node
+            free(newNode);             //bst allow nahi karat duplicate values la tr mg relese memory that we aaloocated for this unused node
+           //Bcozz new node was created using malloc but the value already exists
+           // so the new node is not inserted free() releases its allocated memory
+            return;                    
         }
     }
     if (value < parent->data)          // checks if value belongs on left
@@ -62,29 +64,29 @@ void insertNode(int value)
 //  SEARCH USING BST 
 void searchNode(int value)
 {
-    struct Node *current = root;       // starts searching from root
-    if (root == NULL)                  // checks if tree is empty
+    struct Node *current = root;       
+    if (root == NULL)                  
     {
         printf("Tree is empty.\n");
-        return;                        // stops function
+        return;
     }
-    while (current != NULL)            // continues until node is found/not found
+    while (current != NULL)            //loop will run until current becomes null
     {
-        if (current->data == value)    // checks current node value
+        if (current->data == value)    // he check karat current node cha data = value ahe ka if 50=50 then TRUE 
         {
             printf("Value found!\n");
-            return;                    // stops when value is found
+            return;                    
         }
-        if (value < current->data)     // checks if value is smaller
+        if (value < current->data)     // if value jr 30 ahe ani 30<50 so (current data is 50) so mg apan current ha pointer left ja gheun jato
         {
-            current = current->left;   // moves to left child
+            current = current->left;
         }
         else
         {
-            current = current->right;  // moves to right child
+            current = current->right;  // if value jr 30 ahe ani 70>50 so (current data is 50) so mg apan current ha pointer right ja gheun jat
         }
     }
-    printf("Value not found!\n");       // value does not exist
+    printf("Value not found!\n");       
 }
 // INORDER USING STACK 
 void inorder()
@@ -208,46 +210,47 @@ void depthTraversal()
 //  UPDATE USING BST 
 void updateNode(int oldValue, int newValue)
 {
-    struct Node *current = root;        // starts from roo
+    struct Node *current = root;        
     if (root == NULL)                   // checks if tree is empty
     {
         printf("Tree is empty.\n");
-        return;                         // stops function
+        return;                         
     }
-    while (current != NULL)             // continues while node exists
+    while (current != NULL)             
     {
-        if (current->data == oldValue)  // checks if old value is found
+        if (current->data == oldValue)  //jr apala pinter alredy current vr point karat asel tr 
         {
-            current->data = newValue;   // changes old value to new value
+            current->data = newValue;   
             printf("Value updated successfully.\n");
-            return;                     // stops function
+            return;                     
         }
-        if (oldValue < current->data)   // checks if old value is smaller
+        if (oldValue < current->data)   
         {
-            current = current->left;    // moves to left child
+            current = current->left;    
         }
         else
         {
-            current = current->right;   // moves to right child
+            current = current->right;   
         }
     }
-    printf("Value not found!\n");        // old value was not found
+    printf("Value not found!\n");        
 }
-//  DELETE USING BST 
-
+//this delete function
 void deleteNode(int value)
 {
-    struct Node *current = root;         // starts from root
-    struct Node *parent = NULL;          // stores parent node
-    struct Node *successor;             // stores inorder successor
-    struct Node *successorParent;       // stores successor's parent
-    struct Node *child;                 // stores child of node to delete
+    struct Node *current = root;         //cuurent checking node la point karate
+    struct Node *parent = NULL;          //current cha parent store karate
+    struct Node *successor;             //points to inorder succesor when deleting node with two children
+    struct Node *successorParent;       //parent of that IS 
+    struct Node *child;                 //just child sotring that maynned to be connected to parent
     if (root == NULL)                   // checks if tree is empty
     {
         printf("Tree is empty.\n");
         return;                     
     }
-    while (current != NULL && current->data != value) // searches for value 
+
+//haaa whole while loop he fakt searching sathi ahe data left la ahe ki right la ahe only thiss!!
+    while (current != NULL && current->data != value) 
     {
         parent = current;               // stores current as parent
         if (value < current->data)      // checks if value is smaller
@@ -259,12 +262,13 @@ void deleteNode(int value)
             current = current->right;   // moves to right child
         }
     }
-    if (current == NULL)                // checks if value was not found
+    if (current == NULL)//if we reach end of tree without finding value
     {
         printf("Value not found!\n");
-        return;                         // stops function
+        return;
     }
-    // NODE HAS TWO CHILDREN =================
+    
+//===========two childss === 
     if (current->left != NULL && current->right != NULL) // checks for two children
     {
         successorParent = current;      // stores current as successor parent
@@ -278,7 +282,9 @@ void deleteNode(int value)
         current = successor;             // current becomes successor
         parent = successorParent;       // parent becomes successor parent
     }
-    //  FIND CHILD 
+
+
+//=============================finding childs of current 
     if (current->left != NULL)           // checks if left child exists
     {
         child = current->left;           // child points to left child
@@ -287,7 +293,7 @@ void deleteNode(int value)
     {
         child = current->right;          // child points to right child
     }
-    //  DELETE NODE
+// ============================exact deleting the nodee
     if (parent == NULL)                  // checks if deleting root
     {
         free(current);                   // deletes current node
