@@ -48,6 +48,12 @@ void insert(int value)
     //hashtable[2] = 12 
     //next==null
     printf("Value inserted successfully.\n");
+
+
+    //to insert idx7== 17 value
+    //newNode->data = 17;
+    //newNode->next = NULL;
+    //hashTable[7] = newNode;
 }
 
 // SEARCH
