@@ -5,7 +5,7 @@ This repository contains C programs that demonstrate **CRUD operations** (Create
 1. **File Handling in C**  
    - Create a file and write data  
    - Read file contents  
-   - Update/append data  
+   - Update/append data.
    - Delete a file  
    - Replace specific lines in a file  
 
