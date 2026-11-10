@@ -24,10 +24,10 @@ void enqueue(int value) {
             front = 0;      
 
         
-        if (value >30 && value < 40)
-            {
-            printf("INVALID");
-             }
+        // if (value >30 && value < 40)
+        //     {
+        //     printf("INVALID");
+        //      }
         else {
         rear++;
             queue[rear] = value; 
